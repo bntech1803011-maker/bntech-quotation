@@ -49,7 +49,7 @@ export default function App() {
     fax: '',
   })
   const [quoteDate, setQuoteDate] = useState(todayISO())
-  const [taxMode, setTaxMode] = useState('exclusive') // exclusive | inclusive
+  const taxMode = 'exclusive' // 부가세 별도 고정
   const [items, setItems] = useState([newItem(2)]) // 그래비티 기본
   const [memo, setMemo] = useState(
     '본 견적의 유효기간은 발행일로부터 14일입니다.'
@@ -106,28 +106,6 @@ export default function App() {
             견적서 · ㈜비앤테크
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center bg-gray-100 rounded text-xs overflow-hidden border border-gray-200">
-              <button
-                className={`px-3 py-1.5 ${
-                  taxMode === 'exclusive'
-                    ? 'bg-black text-white'
-                    : 'text-gray-700'
-                }`}
-                onClick={() => setTaxMode('exclusive')}
-              >
-                부가세 별도
-              </button>
-              <button
-                className={`px-3 py-1.5 ${
-                  taxMode === 'inclusive'
-                    ? 'bg-black text-white'
-                    : 'text-gray-700'
-                }`}
-                onClick={() => setTaxMode('inclusive')}
-              >
-                부가세 포함
-              </button>
-            </div>
             <button
               onClick={addItem}
               className="px-3 py-1.5 text-xs border border-gray-300 rounded hover:bg-gray-50"
@@ -146,16 +124,16 @@ export default function App() {
 
       {/* ===== A4 페이지 ===== */}
       <div className="py-5">
-        <div className="page text-[11px] text-gray-800">
+        <div className="page text-[14px] text-gray-800">
           {/* 제목 */}
-          <div className="text-center text-[22px] font-bold tracking-[8px] pl-[8px] mb-3">
+          <div className="text-center text-[32px] font-bold tracking-[10px] pl-[10px] mb-5">
             견 적 서
           </div>
 
           {/* 헤더: 좌(고객) / 우(공급자) */}
-          <div className="grid grid-cols-2 gap-4 pb-3 mb-3 border-b-2 border-black">
+          <div className="grid grid-cols-2 gap-5 pb-4 mb-4 border-b-2 border-black">
             {/* 공급받는 자 */}
-            <div className="flex flex-col gap-2 text-[11px]">
+            <div className="flex flex-col gap-3 text-[14px]">
               <div className="flex items-center gap-2">
                 <div className="w-16 font-semibold">성명/상호</div>
                 <input
@@ -213,13 +191,13 @@ export default function App() {
             </div>
 
             {/* 공급자 박스 + 직인 */}
-            <div className="relative border border-gray-300 rounded p-3 text-[10px]">
+            <div className="relative border border-gray-300 rounded p-4 text-[13px]">
               <img
                 src="/stamp.png"
                 alt="직인"
-                className="absolute right-3 top-3 w-[78px] h-[78px] object-contain opacity-90 pointer-events-none"
+                className="absolute right-3 top-3 w-[92px] h-[92px] object-contain opacity-90 pointer-events-none"
               />
-              <div className="grid grid-cols-[60px_1fr] gap-y-1.5 pr-[80px]">
+              <div className="grid grid-cols-[70px_1fr] gap-y-2 pr-[100px]">
                 <div className="font-semibold">상호</div>
                 <div>{SUPPLIER.company}</div>
                 <div className="font-semibold">대표자</div>
@@ -231,7 +209,7 @@ export default function App() {
                   {SUPPLIER.type} / {SUPPLIER.industry}
                 </div>
                 <div className="font-semibold">주소</div>
-                <div className="text-[9px] leading-snug">
+                <div className="text-[12px] leading-snug">
                   {SUPPLIER.address}
                 </div>
                 <div className="font-semibold">연락처</div>
@@ -243,49 +221,43 @@ export default function App() {
           </div>
 
           {/* 합계 강조 박스 */}
-          <div className="bg-black text-white rounded px-4 py-3 my-2 flex items-end justify-between">
+          <div className="bg-black text-white rounded px-5 py-4 my-3 flex items-end justify-between">
             <div>
-              <div className="text-[10px] text-gray-400 mb-1">총 견적금액</div>
-              <div className="text-[22px] font-bold leading-none">
+              <div className="text-[13px] text-gray-400 mb-1.5">총 견적금액</div>
+              <div className="text-[30px] font-bold leading-none">
                 {formatKRW(totals.total)}
               </div>
             </div>
-            <div className="text-[10px] text-gray-400 text-right">
+            <div className="text-[13px] text-gray-400 text-right">
               공급가액 {formatKRW(totals.supply)}
               <span className="mx-1">+</span>
               부가세 {formatKRW(totals.vat)}
-              <div className="mt-1 text-gray-500">
-                기준: {taxMode === 'inclusive' ? '부가세 포함' : '부가세 별도'}
-              </div>
             </div>
           </div>
 
           {/* 품목 테이블 */}
-          <table className="w-full border-collapse text-[11px] my-2">
+          <table className="w-full border-collapse text-[14px] my-3">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[5%]">
+                <th className="border border-gray-300 px-2 py-2.5 w-[6%]">
                   No
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[26%] text-left">
+                <th className="border border-gray-300 px-2 py-2.5 w-[34%] text-left">
                   품명
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[18%] text-left">
-                  규격
-                </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[8%]">
+                <th className="border border-gray-300 px-2 py-2.5 w-[10%]">
                   수량
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[12%] text-right">
+                <th className="border border-gray-300 px-2 py-2.5 w-[16%] text-right">
                   단가
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[13%] text-right">
+                <th className="border border-gray-300 px-2 py-2.5 w-[18%] text-right">
                   공급가액
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[12%] text-right">
+                <th className="border border-gray-300 px-2 py-2.5 w-[16%] text-right">
                   부가세
                 </th>
-                <th className="border border-gray-300 px-1.5 py-1.5 w-[6%] no-print">
+                <th className="border border-gray-300 px-1 py-2.5 w-[6%] no-print">
                   ·
                 </th>
               </tr>
@@ -294,8 +266,8 @@ export default function App() {
               {items.length === 0 && (
                 <tr>
                   <td
-                    colSpan={8}
-                    className="border border-gray-300 text-center text-gray-400 py-4"
+                    colSpan={7}
+                    className="border border-gray-300 text-center text-gray-400 py-5"
                   >
                     품목을 추가해주세요
                   </td>
@@ -303,13 +275,12 @@ export default function App() {
               )}
               {items.map((it, idx) => {
                 const c = calculations[idx]
-                const p = PRODUCTS[it.productIdx]
                 return (
                   <tr key={it.id}>
-                    <td className="border border-gray-300 text-center py-1">
+                    <td className="border border-gray-300 text-center py-2">
                       {idx + 1}
                     </td>
-                    <td className="border border-gray-300">
+                    <td className="border border-gray-300 px-2">
                       <select
                         className="cell-input"
                         value={it.productIdx}
@@ -328,9 +299,6 @@ export default function App() {
                         ))}
                       </select>
                     </td>
-                    <td className="border border-gray-300 text-[10px] text-gray-600 px-1.5">
-                      {p.spec}
-                    </td>
                     <td className="border border-gray-300 text-center">
                       <input
                         type="number"
@@ -342,13 +310,13 @@ export default function App() {
                         }
                       />
                     </td>
-                    <td className="border border-gray-300 text-right px-1.5">
+                    <td className="border border-gray-300 text-right px-2">
                       {formatKRW(c.unit)}
                     </td>
-                    <td className="border border-gray-300 text-right px-1.5">
+                    <td className="border border-gray-300 text-right px-2">
                       {formatKRW(c.supply)}
                     </td>
-                    <td className="border border-gray-300 text-right px-1.5">
+                    <td className="border border-gray-300 text-right px-2">
                       {formatKRW(c.vat)}
                     </td>
                     <td className="border border-gray-300 text-center no-print">
@@ -367,15 +335,15 @@ export default function App() {
             <tfoot>
               <tr className="bg-gray-100 font-semibold">
                 <td
-                  colSpan={5}
-                  className="border border-gray-300 text-right px-2 py-1.5"
+                  colSpan={4}
+                  className="border border-gray-300 text-right px-3 py-2"
                 >
                   합계
                 </td>
-                <td className="border border-gray-300 text-right px-1.5">
+                <td className="border border-gray-300 text-right px-2">
                   {formatKRW(totals.supply)}
                 </td>
-                <td className="border border-gray-300 text-right px-1.5">
+                <td className="border border-gray-300 text-right px-2">
                   {formatKRW(totals.vat)}
                 </td>
                 <td className="border border-gray-300 no-print"></td>
@@ -384,20 +352,20 @@ export default function App() {
           </table>
 
           {/* 비고 (수정 가능) */}
-          <div className="border border-gray-300 rounded p-2 mt-3 hover:border-gray-500 transition-colors">
-            <div className="flex items-center justify-between mb-1">
-              <div className="font-semibold text-[10px]">비고</div>
-              <div className="text-[8px] text-gray-400 no-print">↳ 클릭해서 수정</div>
+          <div className="border border-gray-300 rounded p-3 mt-4 hover:border-gray-500 transition-colors">
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-semibold text-[13px]">비고</div>
+              <div className="text-[10px] text-gray-400 no-print">↳ 클릭해서 수정</div>
             </div>
             <textarea
-              className="w-full min-h-[48px] text-[10px] resize-y border border-gray-200 rounded p-1.5 outline-none bg-white focus:border-gray-700"
+              className="w-full min-h-[64px] text-[13px] resize-y border border-gray-200 rounded p-2 outline-none bg-white focus:border-gray-700"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="비고 사항을 입력하세요"
             />
           </div>
 
-          <div className="text-center text-[9px] text-gray-400 mt-3">
+          <div className="text-center text-[11px] text-gray-400 mt-4">
             본 견적서는 입력된 품목·수량·단가를 기준으로 공급가액 및 부가세가 자동
             계산됩니다.
           </div>
