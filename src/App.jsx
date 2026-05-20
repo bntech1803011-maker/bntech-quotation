@@ -49,7 +49,7 @@ export default function App() {
     fax: '',
   })
   const [quoteDate, setQuoteDate] = useState(todayISO())
-  const taxMode = 'exclusive' // 부가세 별도 고정
+  const taxMode = 'inclusive' // 단가 = 부가세 포함 가격
   const [items, setItems] = useState([newItem(2)]) // 그래비티 기본
   const [memo, setMemo] = useState(
     '본 견적의 유효기간은 발행일로부터 14일입니다.'
