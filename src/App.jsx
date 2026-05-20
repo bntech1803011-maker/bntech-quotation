@@ -1,16 +1,18 @@
 import { useState, useMemo } from 'react'
 
 const PRODUCTS = [
-  { name: 'RC-02', spec: '규격 없음', price: 698000 },
-  { name: '프라임', spec: 'RC-Prime300', price: 658000 },
-  { name: '그래비티', spec: 'RC-GT500', price: 828000 },
-  { name: '그래비티(W)', spec: 'RC-GT500W', price: 858000 },
+  { name: 'RC-02', spec: '규격 없음', price: 770000 },
+  { name: '프라임', spec: 'RC-Prime300', price: 598000 },
+  { name: '프라임S320', spec: 'RC-PrimeS320', price: 658000 },
+  { name: '그래비티', spec: 'RC-GT500', price: 788000 },
+  { name: '그래비티(W)', spec: 'RC-GT500W', price: 828000 },
   { name: '이지', spec: '규격 없음', price: 509000 },
   { name: '공용삽', spec: '규격 없음', price: 1500 },
   { name: '여과삽', spec: '규격 없음', price: 2000 },
   { name: '필터(그래비티/프라임)', spec: 'RC-GT500, RC-GT500W, RC-Prime300', price: 19800 },
   { name: '필터(RC-02)', spec: 'RC-02', price: 17000 },
   { name: '푸드클리너', spec: '1kg', price: 55000 },
+  { name: '택배비', spec: '-', price: 3000 },
 ]
 
 const SUPPLIER = {
