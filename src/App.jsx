@@ -15,6 +15,9 @@ const PRODUCTS = [
   { name: '택배비', spec: '-', price: 3000 },
 ]
 
+// 직접입력 항목 식별용 productIdx 값
+const CUSTOM_IDX = -1
+
 const SUPPLIER = {
   company: '㈜비앤테크',
   ceo: '방용휘',
@@ -41,6 +44,8 @@ const newItem = (productIdx = 0) => ({
   id: _nextId++,
   productIdx,
   qty: 1,
+  customName: '',   // 직접입력 품명
+  customPrice: '',  // 직접입력 단가
 })
 
 export default function App() {
@@ -59,7 +64,14 @@ export default function App() {
 
   const calculations = useMemo(() => {
     return items.map((it) => {
-      const p = PRODUCTS[it.productIdx]
+      const isCustom = it.productIdx === CUSTOM_IDX
+      const p = isCustom
+        ? {
+            name: it.customName || '(직접입력)',
+            spec: '-',
+            price: Math.max(0, Number(it.customPrice) || 0),
+          }
+        : PRODUCTS[it.productIdx]
       const qty = Math.max(0, Number(it.qty) || 0)
       const unit = p.price
       let supply, vat, total
@@ -148,10 +160,12 @@ export default function App() {
                 />
                 <span className="text-gray-500 whitespace-nowrap">귀하</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-16 font-semibold">주소</div>
-                <input
-                  className="line-input flex-1"
+              {/* 주소: 긴 주소 자동 줄바꿈(2줄) — 잘림 방지 */}
+              <div className="flex items-start gap-2">
+                <div className="w-16 font-semibold pt-1">주소</div>
+                <textarea
+                  rows={2}
+                  className="line-input flex-1 resize-y leading-snug"
                   placeholder="주소"
                   value={customer.address}
                   onChange={(e) =>
@@ -277,6 +291,7 @@ export default function App() {
               )}
               {items.map((it, idx) => {
                 const c = calculations[idx]
+                const isCustom = it.productIdx === CUSTOM_IDX
                 return (
                   <tr key={it.id}>
                     <td className="border border-gray-300 text-center py-2">
@@ -299,7 +314,18 @@ export default function App() {
                             {pr.name}
                           </option>
                         ))}
+                        <option value={CUSTOM_IDX}>직접입력</option>
                       </select>
+                      {isCustom && (
+                        <input
+                          className="cell-input mt-1 border-b border-gray-300"
+                          placeholder="품명 직접입력"
+                          value={it.customName}
+                          onChange={(e) =>
+                            updateItem(it.id, 'customName', e.target.value)
+                          }
+                        />
+                      )}
                     </td>
                     <td className="border border-gray-300 text-center">
                       <input
@@ -313,7 +339,20 @@ export default function App() {
                       />
                     </td>
                     <td className="border border-gray-300 text-right px-2">
-                      {formatKRW(c.unit)}
+                      {isCustom ? (
+                        <input
+                          type="number"
+                          min="0"
+                          className="cell-input text-right"
+                          placeholder="0"
+                          value={it.customPrice}
+                          onChange={(e) =>
+                            updateItem(it.id, 'customPrice', e.target.value)
+                          }
+                        />
+                      ) : (
+                        formatKRW(c.unit)
+                      )}
                     </td>
                     <td className="border border-gray-300 text-right px-2">
                       {formatKRW(c.supply)}
